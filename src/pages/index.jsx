@@ -15,11 +15,11 @@ export default function HomePage() {
 
       <main className="overflow-hidden">
         <Hero />
-        {/* <ProdukFavorit />
-        <MenuKopi />
-        <Keunggulan />
-        <ReviewSection />
-        <Subscribe /> */}
+        <ProdukFavorit />
+        {/* <MenuKopi /> */}
+        {/* <Keunggulan /> */}
+        {/* <ReviewSection /> */}
+        {/* <Subscribe /> */}
       </main>
 
       <Footer />
