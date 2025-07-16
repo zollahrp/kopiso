@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 
 export default function Hero() {
   const [mouseX, setMouseX] = useState(0);
@@ -13,7 +14,6 @@ export default function Hero() {
       const currentX = e.clientX;
       setMouseX(currentX);
 
-      // Deteksi arah
       if (currentX > prevMouseX.current) {
         setDirection("right");
       } else if (currentX < prevMouseX.current) {
@@ -22,20 +22,20 @@ export default function Hero() {
 
       prevMouseX.current = currentX;
 
-      // Set moving ke true & reset timer
       setIsMoving(true);
       clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
-        setIsMoving(false); // kalau gak gerak lagi, dianggap diem
+        setIsMoving(false);
       }, 100);
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    if (window.innerWidth >= 1024) {
+      window.addEventListener("mousemove", handleMouseMove);
+      return () => window.removeEventListener("mousemove", handleMouseMove);
+    }
   }, []);
 
-  // Tentukan gambar karakter
-  let karakterSrc = "/img/karakter.png"; // default diem
+  let karakterSrc = "/img/karakter.png";
   if (isMoving) {
     karakterSrc =
       direction === "right"
@@ -43,32 +43,50 @@ export default function Hero() {
         : "/img/karakter_kiri.png";
   }
 
+  // Auto center kalau mobile
+  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 1024;
+  const karakterStyle = isDesktop
+    ? {
+      left: `${mouseX}px`,
+      transform: `translateX(-50%) translateY(50px)`,
+    }
+    : {
+      left: "50%",
+      transform: `translateX(-50%) translateY(50px)`,
+    };
+
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-black">
-      {/* Layer 1: Background */}
-      <img
+    <section className="relative w-full h-screen bg-black overflow-hidden">
+      {/* Background selalu full */}
+      <Image
         src="/img/bg-coffee.jpg"
         alt="Background Cafe"
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        fill
+        className="object-cover z-0"
+        priority
       />
 
-      {/* Layer 2: Karakter */}
-      <img
-        src={karakterSrc}
-        alt="Karakter"
-        className="absolute bottom-[-20px] w-[600px] transition-transform duration-50 z-10 pointer-events-none"
-        style={{
-          left: `${mouseX}px`,
-          transform: `translateX(-50%) translateY(50px)`,
-        }}
-      />
+      {/* Scrollable wrapper */}
+      <div className="absolute inset-0 overflow-x-auto lg:overflow-hidden scroll-smooth">
+        <div className="relative min-w-[1152px] h-full">
+          {/* Karakter */}
+          <img
+            src={karakterSrc}
+            alt="Karakter"
+            className="absolute bottom-[-20px] w-[600px] transition-transform duration-75 z-10 pointer-events-none"
+            style={karakterStyle}
+          />
 
-      {/* Layer 3: Meja */}
-      <img
-        src="/img/meja-depan.png"
-        alt="Meja Kopi"
-        className="absolute bottom-0 w-full z-20"
-      />
+          {/* Meja depan */}
+          <Image
+            src="/img/meja-depan.png"
+            alt="Meja Kopi"
+            fill
+            className="absolute bottom-0 left-0 w-full h-auto object-cover z-20"
+          />
+
+        </div>
+      </div>
     </section>
   );
 }

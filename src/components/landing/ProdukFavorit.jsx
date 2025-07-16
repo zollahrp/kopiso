@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Button from "../ui/Button";
-import produkFavorit from "@/constants/produk"; // pastiin ada dummy datanya
+import produk from "@/constants/produk";
 
 export default function ProdukFavorit() {
   return (
     <section className="py-20 bg-[#F9F9F9]">
-      <div className="max-w-screen-xl mx-auto px-8 lg:px-2">
+      <div className="max-w-screen-2xl mx-auto px-4 lg:px-0">
         {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div>
@@ -21,7 +21,7 @@ export default function ProdukFavorit() {
 
         {/* Kartu Produk */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {produkFavorit.map((item, index) => (
+          {produk.slice(0, 5).map((item, index) => (
             <div
               key={index}
               className="bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition-all"

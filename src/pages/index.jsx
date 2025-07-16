@@ -16,7 +16,7 @@ export default function HomePage() {
       <main className="overflow-hidden">
         <Hero />
         <ProdukFavorit />
-        {/* <MenuKopi /> */}
+        <MenuKopi />
         {/* <Keunggulan /> */}
         {/* <ReviewSection /> */}
         {/* <Subscribe /> */}
